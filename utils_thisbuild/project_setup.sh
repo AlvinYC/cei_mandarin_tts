@@ -1,7 +1,7 @@
 cd ~/
 #sh -c 'mv utils_thisbuild content'
-sh -c 'mkdir -p ~/content'
-cd ~/content
+sh -c 'mkdir -p ~/cei_mandarin_tts/content'
+cd ~/cei_mandarin_tts/content
 sh -c 'ln -s ~/utils_thisbuild/model-100000.h5 tacotron2-100k.h5'
 sh -c 'ln -s ~/utils_thisbuild/model-200000.h5 fastspeech2-200k.h5'
 sh -c 'ln -s ~/utils_thisbuild/generator-920000.h5 mb.melgan-920k.h5'
