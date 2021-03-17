@@ -1,6 +1,9 @@
 # CEI custom ignore
 utils_thisbuild/*h5
+utils_thisbuild/vscode-server-linux-x64.tar.gz
+utils_thisbuild/baker_mapper.json
 id_rsa*.pub
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
