@@ -1,0 +1,1 @@
+docker run -it --rm --gpus=all -p 7788:22 -v /home/alvin/docker_hub/cei_mandarin_tts/output:/home/docker/cei_mandarin_tts/output --name taco taco:latest
