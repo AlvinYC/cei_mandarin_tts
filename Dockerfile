@@ -97,7 +97,7 @@ export LD_LIBRARY_PATH=\"/usr/local/cuda/lib64:$LD_LIBRARY_PATH\""
 # numpy=1.19.4, pytorch=1.5, torchvision=0.6
 RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install ipython==7.16.1;\
-    python3 -m pip install flask==2.1.0;\
+    python3 -m pip install Flask==1.1.2;\
     python3 -m pip install opencc-python-reimplemented==0.1.6;\
     # project git clone
     git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
