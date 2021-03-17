@@ -94,10 +94,6 @@ export LD_LIBRARY_PATH=\"/usr/local/cuda/lib64:$LD_LIBRARY_PATH\""
 #    mkdir ${workdir}; mkdir ${local_package};\
 #    cd ${workdir}
  
-#RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
-COPY ${local_package} /home/${user}/${local_package}
-RUN sh /home/${user}/${local_package}/project_setup.sh
-
 # numpy=1.19.4, pytorch=1.5, torchvision=0.6
 RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install ipython;\
@@ -105,6 +101,9 @@ RUN python3 -m pip install --upgrade pip;\
     # project git clone
     git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
 
+#RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
+COPY ${local_package} /home/${user}/${local_package}
+RUN sh /home/${user}/${local_package}/project_setup.sh
 
 #WORKDIR /home/${user}/${github}/TensorFlowTTS
 RUN python3 -m pip install ./${github}/TensorFlowTTS/. 
