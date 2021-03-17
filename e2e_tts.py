@@ -10,6 +10,11 @@ from tensorflow_tts.inference import TFAutoModel
 from tensorflow_tts.inference import AutoProcessor
 from synthesiser import do_synthesis
 import soundfile as sf
+import flask
+from opencc import OpenCC
+import zhon.hanzi as hanzi
+import re
+
 
 tacotron2_config = AutoConfig.from_pretrained('TensorFlowTTS/examples/tacotron2/conf/tacotron2.baker.v1.yaml')
 tacotron2 = TFAutoModel.from_pretrained(
@@ -32,10 +37,26 @@ mb_melgan = TFAutoModel.from_pretrained(
     name="mb_melgan"
 )
 
-input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年度淘汰一至四期老旧机车换购电动机车"
+def sec2numpy(sec):
+    return np.zeros(int(24000*sec))
+
+cc = OpenCC('t2s')
+#input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年度淘汰一至四期老旧机车换购电动机车"
+input_text = "台中持續加碼補助老舊機車汰換電動機車，今年度淘汰一至四期老舊機車換購電動機車"
+input_text =  cc.convert(input_text) # tranditaion to simple
+input_list = re.split('['+hanzi.punctuation+']',input_text)
+
+au1 = np.array([])
+au2 = np.array([])
 # setup window for tacotron2 if you want to try
 tacotron2.setup_window(win_front=5, win_back=5)
-mels, alignment_history, audios = do_synthesis(input_text, tacotron2, mb_melgan, "TACOTRON", "MB-MELGAN")
-sf.write('./output/tacotron_melgan.wav', audios, 24000, 'PCM_24')
-mels, audios = do_synthesis(input_text, fastspeech2, mb_melgan, "FASTSPEECH2", "MB-MELGAN")
-sf.write('./output/factspeech_melgan.wav', audios, 24000, 'PCM_24')
+for idx, txt in enumerate(input_list):
+    mels, alignment_history, audios = do_synthesis(txt, tacotron2, mb_melgan, "TACOTRON", "MB-MELGAN")
+    au1 = audios  if idx == 0 else np.concatenate((au1,sec2numpy(0.1), audios),axis=0)
+    mels, audios = do_synthesis(txt, fastspeech2, mb_melgan, "FASTSPEECH2", "MB-MELGAN")
+    au2 = audios  if idx == 0 else np.concatenate((au2,sec2numpy(0.1),audios),axis=0)
+
+sf.write('./output/tacotron.wav', au1, 24000, 'PCM_24')
+sf.write('./output/factspeech.wav', au2, 24000, 'PCM_24')
+
+
