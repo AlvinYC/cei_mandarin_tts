@@ -5,7 +5,7 @@ MAINTAINER alvin
 ARG user=docker
 #ARG pwd=1234
 #this script will create dir to  /home/{$user}/${worddir} like /home/docker/git_repository
-ARG workdir=workspace
+#ARG workdir=workspace
 #some large package should copy to /home/${user}/$(local_package}
 ARG local_package=utils_thisbuild
 ARG github=cei_mandarin_tts
@@ -39,6 +39,7 @@ RUN useradd -m ${user} && echo "${user}:${user}" | chpasswd && adduser ${user} s
     chmod 777 /etc/ssh/sshd_config; echo 'GatewayPorts yes' >> /etc/ssh/sshd_config; chmod 644 /etc/ssh/sshd_config
 
 USER ${user}
+WORKDIR /home/${user}
 
 # oh-my-zsh setup
 ARG omzthemesetup="POWERLEVEL9K_MODE=\"nerdfont-complete\"\n\
@@ -93,7 +94,7 @@ export LD_LIBRARY_PATH=\"/usr/local/cuda/lib64:$LD_LIBRARY_PATH\""
 #    mkdir ${workdir}; mkdir ${local_package};\
 #    cd ${workdir}
  
-RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
+#RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
 COPY ${local_package} /home/${user}/${local_package}
 RUN sh /home/${user}/${local_package}/project_setup.sh
 
@@ -102,13 +103,11 @@ RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install ipython;\
     python3 -m pip install flask;\
     # project git clone
-    git clone https://github.com/AlvinYC/${github}.git /home/${user}/${workdir}/${github}
+    git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
 
 
-WORKDIR /home/${user}/${workdir}/${github}/TensorflowTTS
-RUN python3 -m pip install . 
-
-
+#WORKDIR /home/${user}/${github}/TensorFlowTTS
+RUN python3 -m pip install ./${github}/TensorFlowTTS/. 
 
 # vscode server part
 RUN curl -sSL "https://update.code.visualstudio.com/commit:${vscommit}/server-linux-x64/stable" -o /home/${user}/${local_package}/vscode-server-linux-x64.tar.gz;\
