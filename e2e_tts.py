@@ -36,6 +36,6 @@ input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年
 # setup window for tacotron2 if you want to try
 tacotron2.setup_window(win_front=5, win_back=5)
 mels, alignment_history, audios = do_synthesis(input_text, tacotron2, mb_melgan, "TACOTRON", "MB-MELGAN")
-sf.write('tacotron_melgan.wav', audios, 24000, 'PCM_24')
+sf.write('./output/tacotron_melgan.wav', audios, 24000, 'PCM_24')
 mels, audios = do_synthesis(input_text, fastspeech2, mb_melgan, "FASTSPEECH2", "MB-MELGAN")
-sf.write('factspeech_melgan.wav', audios, 24000, 'PCM_24')
+sf.write('./output/factspeech_melgan.wav', audios, 24000, 'PCM_24')
