@@ -1,3 +1,7 @@
+# CEI custom ignore
+utils_thisbuild/*h5
+id_rsa*.pub
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
