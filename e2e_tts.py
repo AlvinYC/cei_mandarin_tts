@@ -14,6 +14,7 @@ import flask
 from opencc import OpenCC
 import zhon.hanzi as hanzi
 import re
+from pycnnum import num2cn
 
 
 tacotron2_config = AutoConfig.from_pretrained('TensorFlowTTS/examples/tacotron2/conf/tacotron2.baker.v1.yaml')
@@ -40,10 +41,19 @@ mb_melgan = TFAutoModel.from_pretrained(
 def sec2numpy(sec):
     return np.zeros(int(24000*sec))
 
+d2c = lambda x: num2cn(int(x), numbering_type = 'high', alt_two = True, big = True, traditional= True) if x.isdigit() else x
+
 cc = OpenCC('t2s')
-#input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年度淘汰一至四期老旧机车换购电动机车"
-input_text = "台中持續加碼補助老舊機車汰換電動機車，今年度淘汰一至四期老舊機車換購電動機車"
-input_text =  cc.convert(input_text) # tranditaion to simple
+
+#input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年度淘汰1至4期老旧机车换购电动机车"
+input_text = "台中持續加碼補助老舊機車汰換電動機車，今年度淘汰1至4期老舊機車換購電動機車"
+# digit to mandarin char
+char_digits = re.findall(r'[\u4e00-\u9fff]+|[\uFF01-\uFF5E]+|[0-9]+', input_text)
+char_char = list(map(lambda x: d2c(x), char_digits))
+input_text = ''.join(char_char)
+# conver trandition to simple char
+input_text =  cc.convert(input_text) 
+# sentence segmentation by punctuation
 input_list = re.split('['+hanzi.punctuation+']',input_text)
 
 au1 = np.array([])

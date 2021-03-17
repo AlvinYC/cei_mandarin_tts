@@ -18,6 +18,7 @@ import uuid
 from opencc import OpenCC
 import zhon.hanzi as hanzi
 import re
+from  pycnnum import num2cn
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--address',
@@ -58,6 +59,7 @@ mb_melgan = TFAutoModel.from_pretrained(
 cc = OpenCC('t2s')
 def sec2numpy(sec):
     return np.zeros(int(24000*sec))
+d2c = lambda x: num2cn(int(x), numbering_type = 'high', alt_two = True, big = True, traditional= True) if x.isdigit() else x
 
 @app.route('/tts', methods=['GET', 'POST'])
 def do_tts():
@@ -71,10 +73,17 @@ def do_tts():
             return 'Your POST data must contain \'text\' key'
         text = data['text']
         
-        #input_text = "玉山金旗下玉山銀行今日宣布數位金融服務再升級"
-        input_text =  cc.convert(text)
-        #input_text = text
+        #input_text = "台中持续加码补助老旧机车淘汰换电动机车，今年度淘汰1至4期老旧机车换购电动机车"
+        #input_text = "台中持續加碼補助老舊機車汰換電動機車，今年度淘汰1至4期老舊機車換購電動機車"
+        # digit to mandarin char
+        char_digits = re.findall(r'[\u4e00-\u9fff]+|[\uFF01-\uFF5E]+|[0-9]+', text)
+        char_char = list(map(lambda x: d2c(x), char_digits))
+        input_text = ''.join(char_char)
+        # conver trandition to simple char
+        input_text =  cc.convert(input_text) 
+        # sentence segmentation by punctuation
         input_list = re.split('['+hanzi.punctuation+']',input_text)
+
         tacotron2.setup_window(win_front=5, win_back=5)
         au1 = np.array([])
         au2 = np.array([])
