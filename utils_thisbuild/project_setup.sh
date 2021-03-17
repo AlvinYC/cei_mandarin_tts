@@ -8,4 +8,5 @@ sh -c 'ln -s ~/utils_thisbuild/generator-920000.h5 mb.melgan-920k.h5'
 sh -c 'ln -s ~/utils_thisbuild/baker_mapper.json baker_mapper.json'
 # merge all id_rsa.pub into this container
 #sh -c 'cat /home/docker/utils_thisbuild/*pub > /home/docker/.ssh/authorized_keys'
-
+sh -c 'git config --global user.name alvinyc'
+sh -c 'git config --global user.email chen.yongcheng@gmail.com'
