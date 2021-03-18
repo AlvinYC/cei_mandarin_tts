@@ -1,5 +1,7 @@
 
 # simple test ==>  e2e_tts.py
 docker run -it --rm --gpus=all -p 7788:22 -v /home/alvin/docker_hub/cei_mandarin_tts/output:/home/docker/cei_mandarin_tts/output --name taco taco:latest
-# server test ==> server.py
+# flask server ==> server.py
 docker run -it --rm --gpus=all -p 7788:22 -p 8080:8080 -v /home/alvin/git_repo_alvin/cei_mandarin_tts/output:/home/docker/cei_mandarin_tts/output --name taco taco:latest
+# jupyter notebook server 
+docker run -it --rm --gpus=all -p 7788:22 -p 8080:8080 -p 8888:8888 -v /home/alvin/git_repo_alvin/cei_mandarin_tts/output:/home/docker/cei_mandarin_tts/output --name taco taco:latest
