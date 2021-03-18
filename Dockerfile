@@ -120,7 +120,13 @@ RUN curl -sSL "https://update.code.visualstudio.com/commit:${vscommit}/server-li
     tar zxvf /home/${user}/${local_package}/vscode-server-linux-x64.tar.gz -C ~/.vscode-server/bin/${vscommit} --strip 1;\
     touch ~/.vscode-server/bin/${vscommit}/0
 
-
+# jupyter notebook config
+RUN jupyter notebook --generate-config;\
+    sed -ir "s/\#c\.NotebookApp\.token.*/c\.NotebookApp\.token = \'\'/" ~/.jupyter/jupyter_notebook_config.py;\
+    sed -ir "s/#c\.NotebookApp\.password =.*/c\.NotebookApp\.password = u\'\'/" ~/.jupyter/jupyter_notebook_config.py;\
+    sed -ir "s/#c\.NotebookApp\.ip = .*/c\.NotebookApp\.ip = \'\*\'/" ~/.jupyter/jupyter_notebook_config.py;\
+    sed -ir "s/#c\.NotebookApp\.notebook_dir.*/c\.NotebookApp\.notebook_dir = \'\/home\/docker\/cei_mandarin_tts\'/" ~/.jupyter/jupyter_notebook_config.py
+ 
 ADD id_rsa.pub /home/${user}/.ssh/authorized_keys
 
 ENTRYPOINT sudo service ssh restart && zsh
