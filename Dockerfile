@@ -101,6 +101,7 @@ RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install Flask==1.1.2;\
     python3 -m pip install opencc-python-reimplemented==0.1.6;\
     python3 -m pip install zhon==1.1.5;\
+    python3 -m pip install pycnnum==1.0.1;\
     # project git clone
     git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
 
