@@ -12,6 +12,11 @@ ARG github=cei_mandarin_tts
 #vscode server 1.54.2
 ARG vscommit=fd6f3bce6709b121a895d042d343d71f317d74e7
 
+RUN TZ=Asia/Taipei \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata 
+
 # init.
 RUN apt-get update && apt-get install -y \
     apt-utils sudo vim zsh curl git make unzip \
@@ -27,14 +32,6 @@ RUN apt-get update && apt-get install -y \
 # udpate timezone
 RUN apt-get update \
     &&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
-    
-RUN TZ=Asia/Taipei \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone \
-    && dpkg-reconfigure -f noninteractive tzdata 
-
-
-# create account/ssh setup
 RUN useradd -m ${user} && echo "${user}:${user}" | chpasswd && adduser ${user} sudo;\
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers;\
     chmod 777 /etc/ssh/sshd_config; echo 'GatewayPorts yes' >> /etc/ssh/sshd_config; chmod 644 /etc/ssh/sshd_config
