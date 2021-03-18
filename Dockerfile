@@ -12,6 +12,10 @@ ARG github=cei_mandarin_tts
 #vscode server 1.54.2
 ARG vscommit=fd6f3bce6709b121a895d042d343d71f317d74e7
 
+# udpate timezone
+RUN apt-get update \
+    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+
 RUN TZ=Asia/Taipei \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
@@ -29,9 +33,6 @@ RUN apt-get update && apt-get install -y \
     libsndfile1 \
     jupyter-notebook  
 
-# udpate timezone
-RUN apt-get update \
-    &&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
 RUN useradd -m ${user} && echo "${user}:${user}" | chpasswd && adduser ${user} sudo;\
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers;\
     chmod 777 /etc/ssh/sshd_config; echo 'GatewayPorts yes' >> /etc/ssh/sshd_config; chmod 644 /etc/ssh/sshd_config
@@ -100,7 +101,11 @@ RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install zhon==1.1.5;\
     python3 -m pip install pycnnum==1.0.1;\
     # project git clone
-    git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
+    git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github};\
+    # fix pycnnum issue, ref: https://github.com/zcold/pycnnum/issues/4
+    sed -ir 's/return \[system\.digits\[0.*/return \[system.digits\[0\], system.digits\[int\(striped_string\)\]\]/' \
+    /home/${user}/.local/lib/python3.6/site-packages/pycnnum/pycnnum.py
+
 
 #RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
 COPY ${local_package} /home/${user}/${local_package}
