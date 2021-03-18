@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     # zsh by ssh issue : icons.zsh:168: character not in range
     language-pack-en \
-    libsndfile1 
+    libsndfile1 \
+    jupyter-notebook  
 
 # udpate timezone
 RUN apt-get update \
@@ -99,6 +100,7 @@ RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install ipython==7.16.1;\
     python3 -m pip install Flask==1.1.2;\
     python3 -m pip install opencc-python-reimplemented==0.1.6;\
+    python3 -m pip install zhon==1.1.5;\
     # project git clone
     git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github}
 
