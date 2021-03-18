@@ -52,6 +52,7 @@ POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND=\"white\"\n\
 POWERLEVEL9K_PYTHON_ICON=\"\\U1F40D\"\n"
 
 RUN cd ~/ ; mkdir .ssh ;\
+    #sed -ir "s/#c\.ContentsManager\.root_dir = .*/c\.ContentsManager\.root_dir = \'\/home\/docker\/cei_mandarin_tts\/\'/" ~/.jupyter/jupyter_notebook_config.py
     sudo mkdir /var/run/sshd ;\
     sudo sed -ri 's/session required pam_loginuid.so/#session required pam_loginuid.so/g' /etc/pam.d/sshd ;\
     sudo ssh-keygen -A ;\
@@ -121,11 +122,26 @@ RUN curl -sSL "https://update.code.visualstudio.com/commit:${vscommit}/server-li
     touch ~/.vscode-server/bin/${vscommit}/0
 
 # jupyter notebook config
+ARG JUCELL="{\
+  \"MarkdownCell\": {\
+    \"cm_config\": {\
+      \"lineWrapping\": true\
+    }\
+  },\
+  \"CodeCell\": {\
+    \"cm_config\": {\
+      \"lineWrapping\": true\
+    }\
+  }\
+}"
+
 RUN jupyter notebook --generate-config;\
     sed -ir "s/\#c\.NotebookApp\.token.*/c\.NotebookApp\.token = \'\'/" ~/.jupyter/jupyter_notebook_config.py;\
     sed -ir "s/#c\.NotebookApp\.password =.*/c\.NotebookApp\.password = u\'\'/" ~/.jupyter/jupyter_notebook_config.py;\
     sed -ir "s/#c\.NotebookApp\.ip = .*/c\.NotebookApp\.ip = \'\*\'/" ~/.jupyter/jupyter_notebook_config.py;\
-    sed -ir "s/#c\.NotebookApp\.notebook_dir.*/c\.NotebookApp\.notebook_dir = \'\/home\/docker\/cei_mandarin_tts\'/" ~/.jupyter/jupyter_notebook_config.py
+    sed -ir "s/#c\.NotebookApp\.notebook_dir.*/c\.NotebookApp\.notebook_dir = \'\/home\/docker\/cei_mandarin_tts\'/" ~/.jupyter/jupyter_notebook_config.py;\
+    mkdir -p ~/.jupyter/nbconfig;\
+    echo ${JUCELL} > ~/.jupyter/nbconfig/notebook.json        
  
 ADD id_rsa.pub /home/${user}/.ssh/authorized_keys
 
