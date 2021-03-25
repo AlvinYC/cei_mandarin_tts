@@ -65,7 +65,7 @@ def e2e_tts(input_text,tacotron2,fastspeech2,mb_melgan):
     print('d2c:' + input_text)
     # 第四步：依照標點符號分段(句) sentence segmentation by punctuation
     input_list = re.split('['+hanzi.punctuation+']',input_text)
-    intput_list = list(filter(lambda x: len(x)>0, input_list))
+    input_list = list(filter(lambda x: len(x)>0, input_list))
     # 開始以句為單位進行TTS
     tacotron2.setup_window(win_front=5, win_back=5)
     au1 = np.array([])
