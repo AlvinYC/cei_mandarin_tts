@@ -11,19 +11,21 @@
         ├── Dockerfile
         ├── docker_run.txt
         ├── e2e_tts.py
-        ├── id_rsa.pub                  # (1) ssh public key in your devcelop pc
+        ├── id_rsa.pub               # (1) ssh public key in your devcelop pc
         ├── README.md
         ├── server.py
         ├── server_web.ipynb
         ├── synthesiser.py
         ├── TensorFlowTTS
         └── utils_thisbuild          #  some model file or bug size file not in gitub
-            ├── baker_mapper.json        #(2) Baker Mapper Json https://drive.google.com/uc?id=1cS8jNEgovxUNuCVQSOM68HujrzMGKXNB
-            ├── generator-920000.h5      #(3) MelGan Vocoder https://drive.google.com/uc?id=17Db2R2k8mJmbO5utX80AVK8ssAr-JpCB
-            ├── model-100000.h5             #(4) Tacoton model https://drive.google.com/uc?id=1n36vcrEPQ0SyL7wVrYsNVrPiuGhiOF4h
-            ├── model-200000.h5             #(5)  Fastspeech model https://drive.google.com/uc?id=1PAFpsILkih5zSTbYQw-hpAe5eaNJh0hb
+            ├── baker_mapper.json    #(2) Baker Mapper Json gdown 'https://drive.google.com/uc?id=1cS8jNEgovxUNuCVQSOM68HujrzMGKXNB'
+            ├── generator-920000.h5  #(3) MelGan Vocoder gdown 'https://drive.google.com/uc?id=17Db2R2k8mJmbO5utX80AVK8ssAr-JpCB'
+            ├── model-100000.h5      #(4) Tacoton model gdown 'https://drive.google.com/uc?id=1n36vcrEPQ0SyL7wVrYsNVrPiuGhiOF4h'
+            ├── model-200000.h5      #(5) Fastspeech model 'https://drive.google.com/uc?id=1PAFpsILkih5zSTbYQw-hpAe5eaNJh0hb'
             ├── project_setup.sh
             └── vscode-server-linux-x64.tar.gz #(6) VS coder server 1.54.2 commit=fd6f3bce6709b121a895d042d343d71f317d74e7
+
+    * python3 -m pip install gdown
 
     ```
 ## run as service
