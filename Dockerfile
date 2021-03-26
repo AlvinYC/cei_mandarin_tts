@@ -73,12 +73,8 @@ RUN cd ~/ ; mkdir .ssh ;\
     sudo chsh -s $(which zsh) ${user}
 
 # python package setup
-ARG cudapathsetup="alias python=\'python3\'\n\
-alias pip=\'pip3\'\n\
-alias watch1=\'watch -n 0.5\'\n\
-#export PATH=\"/usr/local/cuda/bin:$PATH\"\n\
-export PATH=\"/home/${user}/.local/bin:$PATH\"\n\
-export LD_LIBRARY_PATH=\"/usr/local/cuda/lib64:$LD_LIBRARY_PATH\""
+#ARG cudapathsetup="alias watch1=watch -n 0.5\n\dd
+#export PATH=/home/${user}/.local/bin:$PATH"
 
 
 
@@ -101,6 +97,7 @@ RUN python3 -m pip install --upgrade pip;\
     python3 -m pip install opencc-python-reimplemented==0.1.6;\
     python3 -m pip install zhon==1.1.5;\
     python3 -m pip install pycnnum==1.0.1;\
+    python3 -m pip install gdown==3.12.2;\
     # project git clone
     git clone https://github.com/AlvinYC/${github}.git /home/${user}/${github};\
     # fix pycnnum issue, ref: https://github.com/zcold/pycnnum/issues/4
@@ -110,7 +107,9 @@ RUN python3 -m pip install --upgrade pip;\
 
 #RUN mkdir /home/${user}/${workdir}; mkdir /home/${user}/${local_package}
 COPY ${local_package} /home/${user}/${local_package}
-RUN sh /home/${user}/${local_package}/project_setup.sh
+RUN  echo "alias watch1=watch -n 0.5" >> ~/.zshrc;\
+     echo "export PATH=/home/${user}/.local/bin:$PATH" >> ~/.zshrc;\
+     sh /home/${user}/${local_package}/project_setup.sh
 
 #WORKDIR /home/${user}/${github}/TensorFlowTTS
 RUN python3 -m pip install ./${github}/TensorFlowTTS/. 
